@@ -1,0 +1,42 @@
+{
+    "camera": {
+        "path": "G:/ExperimentData/20180320-1/C001H001S0027",
+        "cam_type": "sa4",
+        "image_width": 512,
+        "image_height": 512,
+        "frame_start": 0,
+        "frame_end": 400
+    },
+    "vmem": {
+        "diff_min": 40,
+        "intensity_min": 70,
+        "smooth_size": 9
+    },
+    "pvmap": {
+        "pv_win": 3
+    },
+    "menu": {
+        "save_int": 400,
+        "cam": 2,
+        "vmem": 0,
+        "pmap": 0,
+        "pvmap": 0,
+        "core": 1,
+        "integrate": 3
+    },
+    "roi_rect": {
+        "top": 0,
+        "bottom": 0,
+        "left": 0,
+        "right": 0
+    },
+    "core": {
+        "pv_thre": 0.8
+    },
+    "integ": {
+        "phase_wf": -2.0,
+        "phase_wt": 2.0,
+        "phase_dwf": 0.3,
+        "phase_dwt": 0.3
+    }
+}
