@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox, QErrorMessage, QPushButton
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox
 
 from opapp import run_opapp
-from playerLayout import OpappPlayerLayout
+from objectPlayerLayout import OpappObjectPlayerLayout
 
 class ParamWidget(QWidget):
   cam_types = ["sa4", "max", "max10", "mini"]
@@ -133,10 +133,10 @@ class ParamWidget(QWidget):
 
     self.loadParam()
     
-    self.player1 = OpappPlayerLayout()
-    self.player2 = OpappPlayerLayout()
-    self.player3 = OpappPlayerLayout()
-    self.player4 = OpappPlayerLayout()
+    self.player1 = OpappObjectPlayerLayout()
+    self.player2 = OpappObjectPlayerLayout()
+    self.player3 = OpappObjectPlayerLayout()
+    self.player4 = OpappObjectPlayerLayout()
     
     #----------
     # Model
@@ -154,12 +154,17 @@ class ParamWidget(QWidget):
             assert path is not ""
             self.path = path
             self.saveParam()
-            run_opapp(raw_path=self.path, result_path=saveDir)
+            cam, vmem, pmap, pvmap = run_opapp(raw_path=self.path, result_path=saveDir)
             
-            self.player1.setPath(os.path.join(self.path, 'result/opapp/cam'))
-            self.player2.setPath(os.path.join(self.path, 'result/opapp/vmem'))
-            self.player3.setPath(os.path.join(self.path, 'result/opapp/pmap'))
-            self.player4.setPath(os.path.join(self.path, 'result/opapp/pvmap'))
+            #self.player1.setPath(os.path.join(self.path, 'result/opapp/cam'))
+            #self.player2.setPath(os.path.join(self.path, 'result/opapp/vmem'))
+            #self.player3.setPath(os.path.join(self.path, 'result/opapp/pmap'))
+            #self.player4.setPath(os.path.join(self.path, 'result/opapp/pvmap'))
+            
+            self.player1.setObject(cam)
+            self.player2.setObject(vmem)
+            self.player3.setObject(pmap)
+            self.player4.setObject(pvmap)
 
             QMessageBox.information(None,"",u"処理完了！　保存フォルダ:\n"+saveDir)
 

@@ -12,6 +12,12 @@ from opmap.util import makeMovie
 #from opmap.cmap import bipolar
 
 def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
+    
+    rawcam = None
+    vmem = None
+    pmap = None
+    pvmap = None
+    
     with open(json_path, "r") as f : params = json.load(f)
     param_cam     = params.get("camera",{})
     param_menu   = params.get("menu",{})
@@ -49,19 +55,20 @@ def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
 #    print(saveDir)
 
     if param_menu["cam"] == 0 : return
-#    print "RawCam..."
+    print("RawCam...")
     rawcam = RawCam(**param_cam)
     if roi_rect is not None : rawcam.setRectROI(**roi_rect)
     if intensity_min > 0 : rawcam.setIntROI(val_min=intensity_min)
     rawcam.morphROI(closing=10)
     rawcam.morphROI(erosion=10)
+    rawcam.saveImage(saveDir+'/cam', skip=len(rawcam.data))
     if param_menu["cam"] in [2,3] : rawcam.saveImage(saveDir+'/cam', skip=save_int)
     if param_menu["cam"] == 3 : makeMovie(saveDir+'/cam')
     if param_menu["cam"] == 4 : np.save(saveDir+'/cam', rawcam.data)
-#    print "done",
+    print("done")
 
     if param_menu["vmem"] == 0 : return
-#    print "VmemMap..."
+    print("VmemMap...")
     vmem = VmemMap(rawcam)
     if diff_min > 0 : vmem.setDiffRange(diff_min=diff_min)
     vmem.morphROI(closing=10)
@@ -70,23 +77,24 @@ def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
     if param_menu["vmem"] in [2,3] : vmem.saveImage(saveDir+'/vmem', skip=save_int)
     if param_menu["vmem"] == 3 : makeMovie(saveDir+'/vmem')
     if param_menu["vmem"] == 4 : np.save(saveDir+'/vmem', vmem.data)
-#    print "done",
+    print("done")
 
     if param_menu["pmap"] == 0 : return
-#    print "PhaseMap..."
+    print("PhaseMap...")
     pmap = PhaseMap(vmem)
     if param_menu["pmap"] in [2,3] : pmap.saveImage(saveDir+'/pmap', skip=save_int)
     if param_menu["pmap"] == 3 : makeMovie(saveDir+'/pmap')
     if param_menu["pmap"] == 4 : np.save(saveDir+'/pmap', pmap.data)
-#    print "done",
+    print("done")
 
     if param_menu["pvmap"] == 0 : return
-#    print "PhaseVarianceMap..."
+    print("PhaseVarianceMap...")
+    pmap.smooth(9)
     pvmap = PhaseVarianceMap(pmap, size=pv_win)
     if param_menu["pvmap"] in [2,3] : pvmap.saveImage(saveDir+'/pvmap', skip=save_int)
     if param_menu["pvmap"] == 3 : makeMovie(saveDir+'/pvmap')
     if param_menu["pvmap"] == 4 : np.save(saveDir+'/pvmap', pvmap.data) 
-#    print "done",
+    print("done")
 
     if param_menu["core"] == 0 : return
 #    print "CoreMap..."
@@ -143,6 +151,8 @@ def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
 #        makeMovie(saveDir+'/all', img_type='png')
   
 #    print "done"
+    
+    return rawcam, vmem, pmap, pvmap
 
 if __name__ == '__main__':
 

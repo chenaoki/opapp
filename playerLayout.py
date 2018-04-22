@@ -42,6 +42,7 @@ class OpappPlayerLayout(QVBoxLayout):
         self.btn_stop.clicked.connect(self.stop)
         
         self.timer = QtCore.QTimer(self)
+        self.timer.setInterval(60)
         
         layout = QHBoxLayout()
         layout.addWidget(self.edit_frame)
@@ -109,6 +110,7 @@ class OpappPlayerLayout(QVBoxLayout):
     def play(self):
         del(self.timer)
         self.timer = QtCore.QTimer(self)
+        self.timer.setInterval(60)
         self.timer.timeout.connect(self.goNext)
         self.timer.start( max(len(self.files) - self.frame, 0))
         
