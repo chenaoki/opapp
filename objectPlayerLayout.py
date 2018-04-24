@@ -38,9 +38,9 @@ class OpappObjectPlayerLayout(OpappPlayerLayout):
     def play(self):
         del(self.timer)
         self.timer = QtCore.QTimer(self)
-        self.timer.setInterval(60)
+        self.timer.setInterval(60) #The max FPS is limited to around 25 (interval = 40)
         self.timer.timeout.connect(self.goNext)
-        self.timer.start( max(len(self.obj.data) - self.frame, 0))
+        self.timer.start()
 
                         
 if __name__ == '__main__':
