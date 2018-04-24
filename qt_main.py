@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox
 
 from opapp import run_opapp
 from objectPlayerLayout import OpappObjectPlayerLayout
+from plotLayout import OpappPlotLayout
 
 class ParamWidget(QWidget):
   cam_types = ["sa4", "max", "max10", "mini"]
@@ -138,6 +139,8 @@ class ParamWidget(QWidget):
     self.player3 = OpappObjectPlayerLayout()
     self.player4 = OpappObjectPlayerLayout()
     
+    self.plot1 = OpappPlotLayout()
+    
     #----------
     # Model
     #----------
@@ -165,6 +168,8 @@ class ParamWidget(QWidget):
             self.player2.setObject(vmem)
             self.player3.setObject(pmap)
             self.player4.setObject(pvmap)
+            
+            self.plot1.setObject(vmem)
 
             QMessageBox.information(None,"",u"処理完了！　保存フォルダ:\n"+saveDir)
 
@@ -322,6 +327,10 @@ class ParamWidget(QWidget):
     layout = QHBoxLayout()
     layout.addLayout(self.player1)
     layout.addLayout(self.player2)
+    cont_result.addLayout(layout)
+    
+    layout = QHBoxLayout()
+    layout.addLayout(self.plot1)
     cont_result.addLayout(layout)
     
     layout = QHBoxLayout()
