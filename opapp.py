@@ -54,103 +54,113 @@ def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
         os.makedirs(saveDir)
 #    print(saveDir)
 
-    if param_menu["cam"] == 0 : return
-    print("RawCam...")
-    rawcam = RawCam(**param_cam)
-    if roi_rect is not None : rawcam.setRectROI(**roi_rect)
-    if intensity_min > 0 : rawcam.setIntROI(val_min=intensity_min)
-    rawcam.morphROI(closing=10)
-    rawcam.morphROI(erosion=10)
-    rawcam.saveImage(saveDir+'/cam', skip=len(rawcam.data))
-    if param_menu["cam"] in [2,3] : rawcam.saveImage(saveDir+'/cam', skip=save_int)
-    if param_menu["cam"] == 3 : makeMovie(saveDir+'/cam')
-    if param_menu["cam"] == 4 : np.save(saveDir+'/cam', rawcam.data)
-    print("done")
+    if param_menu["cam"] != 0 :
+        print("RawCam...")
+        rawcam = RawCam(**param_cam)
+        if roi_rect is not None : rawcam.setRectROI(**roi_rect)
+        if intensity_min > 0 : rawcam.setIntROI(val_min=intensity_min)
+        rawcam.morphROI(closing=10)
+        rawcam.morphROI(erosion=10)
+        rawcam.saveImage(saveDir+'/cam', skip=len(rawcam.data))
+        if param_menu["cam"] in [2,3] : rawcam.saveImage(saveDir+'/cam', skip=save_int)
+        if param_menu["cam"] == 3 : makeMovie(saveDir+'/cam')
+        if param_menu["cam"] == 4 : np.save(saveDir+'/cam', rawcam.data)
+        print("done")
+    else:
+        print("Skip RawCam")
 
-    if param_menu["vmem"] == 0 : return
-    print("VmemMap...")
-    vmem = VmemMap(rawcam)
-    if diff_min > 0 : vmem.setDiffRange(diff_min=diff_min)
-    vmem.morphROI(closing=10)
-    vmem.morphROI(erosion=10)
-    if smooth_size > 0 : vmem.smooth(size=smooth_size)
-    if param_menu["vmem"] in [2,3] : vmem.saveImage(saveDir+'/vmem', skip=save_int)
-    if param_menu["vmem"] == 3 : makeMovie(saveDir+'/vmem')
-    if param_menu["vmem"] == 4 : np.save(saveDir+'/vmem', vmem.data)
-    print("done")
+    if param_menu["vmem"] != 0 :
+        print("VmemMap...")
+        vmem = VmemMap(rawcam)
+        if diff_min > 0 : vmem.setDiffRange(diff_min=diff_min)
+        vmem.morphROI(closing=10)
+        vmem.morphROI(erosion=10)
+        if smooth_size > 0 : vmem.smooth(size=smooth_size)
+        if param_menu["vmem"] in [2,3] : vmem.saveImage(saveDir+'/vmem', skip=save_int)
+        if param_menu["vmem"] == 3 : makeMovie(saveDir+'/vmem')
+        if param_menu["vmem"] == 4 : np.save(saveDir+'/vmem', vmem.data)
+        print("done")
+    else:
+        print("Skip VmemMap")
 
-    if param_menu["pmap"] == 0 : return
-    print("PhaseMap...")
-    pmap = PhaseMap(vmem)
-    if param_menu["pmap"] in [2,3] : pmap.saveImage(saveDir+'/pmap', skip=save_int)
-    if param_menu["pmap"] == 3 : makeMovie(saveDir+'/pmap')
-    if param_menu["pmap"] == 4 : np.save(saveDir+'/pmap', pmap.data)
-    print("done")
+    if param_menu["pmap"] != 0 :
+        print("PhaseMap...")
+        pmap = PhaseMap(vmem)
+        if param_menu["pmap"] in [2,3] : pmap.saveImage(saveDir+'/pmap', skip=save_int)
+        if param_menu["pmap"] == 3 : makeMovie(saveDir+'/pmap')
+        if param_menu["pmap"] == 4 : np.save(saveDir+'/pmap', pmap.data)
+        print("done")
+    else:
+        print("Skip PhaseMap")
 
-    if param_menu["pvmap"] == 0 : return
-    print("PhaseVarianceMap...")
-    pmap.smooth(9)
-    pvmap = PhaseVarianceMap(pmap, size=pv_win)
-    if param_menu["pvmap"] in [2,3] : pvmap.saveImage(saveDir+'/pvmap', skip=save_int)
-    if param_menu["pvmap"] == 3 : makeMovie(saveDir+'/pvmap')
-    if param_menu["pvmap"] == 4 : np.save(saveDir+'/pvmap', pvmap.data) 
-    print("done")
+    if param_menu["pvmap"] != 0 :
+        print("PhaseVarianceMap...")
+        pmap.smooth(9)
+        pvmap = PhaseVarianceMap(pmap, size=pv_win)
+        if param_menu["pvmap"] in [2,3] : pvmap.saveImage(saveDir+'/pvmap', skip=save_int)
+        if param_menu["pvmap"] == 3 : makeMovie(saveDir+'/pvmap')
+        if param_menu["pvmap"] == 4 : np.save(saveDir+'/pvmap', pvmap.data)
+        print("done")
+    else:
+        print("Skip PhaseVarianceMap")
 
-    if param_menu["core"] == 0 : return
-#    print "CoreMap..."
-#    coremap = CoreMap(pvmap, threshold=threshold)
-#    if param_menu["core"] in [2,3] : coremap.saveImage(saveDir+'/core', skip=save_int)
-#    if param_menu["core"] == 3 : makeMovie(saveDir+'/core')
-#    if param_menu["core"] == 4 : np.save(saveDir+'/core', coremap.data)
-#    if flg_corelog == 1 : np.savetxt(saveDir+'/core.log', coremap.getCoreLog())
-#    print "done",
+    #if param_menu["core"] != 0 :
+        #   print "CoreMap..."
+        #   coremap = CoreMap(pvmap, threshold=threshold)
+        #   if param_menu["core"] in [2,3] : coremap.saveImage(saveDir+'/core', skip=save_int)
+        #   if param_menu["core"] == 3 : makeMovie(saveDir+'/core')
+        #   if param_menu["core"] == 4 : np.save(saveDir+'/core', coremap.data)
+        #   if flg_corelog == 1 : np.savetxt(saveDir+'/core.log', coremap.getCoreLog())
+        #   print("done")
+    #else:
+        #print("Skip CoreMap")
 
-    if param_menu["integrate"] in [0,1] : return
-#    print "Integrate..."
-#    if param_menu["integrate"] in [2,3] :
-#
-#        if not os.path.exists(saveDir+'/all'):
-#            os.makedirs(saveDir+'/all')
-#
-#        s = coremap.data.shape
-#        if save_int > 0 :
-#            frames = list(range(0, s[0], save_int))
-#        else:
-#            frames = list(range(s[0]))
-#
-#        cam = cv2.resize( rawcam.data[0,:,:], (s[1],s[2]) )
-#        cam = 255.0 * ( cam.astype(np.float) / float(np.max(cam)) )
-#        cmap_vm = bipolar()
-#
-#        for n, f in enumerate(frames):
-#
-#            im_out = np.zeros([s[1],s[2],3], dtype=np.uint8)
-#
-#            # Blending
-#            vm = cv2.resize( 0.5*(1.0+vmem.data[f,:,:]), (s[1],s[2]) )
-#            wf = ( np.absolute( phase_add( pmap.data[f,:,:] , -phase_wf ) ) < phase_dwf )*1
-#            wt = ( np.absolute( phase_add( pmap.data[f,:,:] , -phase_wt ) ) < phase_dwt )*1
-#            wf = wf.astype(np.uint8)
-#            wt = wt.astype(np.uint8)
-##            core = ((coremap.data[f,:,:]>0)*1).astype(np.uint8)
-#
-#            im_out = ( cmap_vm(vm)[:,:,:3] * 255 ).astype(np.uint8)
-#            im_out = im_out[:,:,::-1]
-#            im_out[:,:,1]  = wf*255 
-#            im_out[:,:,0]  = wt*255 
-#            for i, c in enumerate('rgb'):
-##                im_out[:,:,i] = core*255 + (1-core)*im_out[:,:,i]
-#                im_out[:,:,i] = cam*0.3 + im_out[:,:,i]*(1-0.3)
-#                im_out[:,:,i] *= pmap.roi.astype(np.uint8)
-#
-#            im_draw = np.array(im_out)
-#            cv2.putText(im_draw, "{0:0>4}".format(f), (5,15), cv2.FONT_HERSHEY_PLAIN,.8,(255,255,255))
-#            cv2.imwrite(saveDir+'/all/{0:0>6}.png'.format(n), im_draw)      
-#  
-#    if param_menu["integrate"] == 3 :
-#        makeMovie(saveDir+'/all', img_type='png')
-  
-#    print "done"
+    #if param_menu["integrate"] not in [0,1] :
+        #    print "Integrate..."
+        #    if param_menu["integrate"] in [2,3] :
+        #
+        #        if not os.path.exists(saveDir+'/all'):
+        #            os.makedirs(saveDir+'/all')
+        #
+        #        s = coremap.data.shape
+        #        if save_int > 0 :
+        #            frames = list(range(0, s[0], save_int))
+        #        else:
+        #            frames = list(range(s[0]))
+        #
+        #        cam = cv2.resize( rawcam.data[0,:,:], (s[1],s[2]) )
+        #        cam = 255.0 * ( cam.astype(np.float) / float(np.max(cam)) )
+        #        cmap_vm = bipolar()
+        #
+        #        for n, f in enumerate(frames):
+        #
+        #            im_out = np.zeros([s[1],s[2],3], dtype=np.uint8)
+        #
+        #            # Blending
+        #            vm = cv2.resize( 0.5*(1.0+vmem.data[f,:,:]), (s[1],s[2]) )
+        #            wf = ( np.absolute( phase_add( pmap.data[f,:,:] , -phase_wf ) ) < phase_dwf )*1
+        #            wt = ( np.absolute( phase_add( pmap.data[f,:,:] , -phase_wt ) ) < phase_dwt )*1
+        #            wf = wf.astype(np.uint8)
+        #            wt = wt.astype(np.uint8)
+        ##            core = ((coremap.data[f,:,:]>0)*1).astype(np.uint8)
+        #
+        #            im_out = ( cmap_vm(vm)[:,:,:3] * 255 ).astype(np.uint8)
+        #            im_out = im_out[:,:,::-1]
+        #            im_out[:,:,1]  = wf*255
+        #            im_out[:,:,0]  = wt*255
+        #            for i, c in enumerate('rgb'):
+        ##                im_out[:,:,i] = core*255 + (1-core)*im_out[:,:,i]
+        #                im_out[:,:,i] = cam*0.3 + im_out[:,:,i]*(1-0.3)
+        #                im_out[:,:,i] *= pmap.roi.astype(np.uint8)
+        #
+        #            im_draw = np.array(im_out)
+        #            cv2.putText(im_draw, "{0:0>4}".format(f), (5,15), cv2.FONT_HERSHEY_PLAIN,.8,(255,255,255))
+        #            cv2.imwrite(saveDir+'/all/{0:0>6}.png'.format(n), im_draw)
+        #
+        #    if param_menu["integrate"] == 3 :
+        #        makeMovie(saveDir+'/all', img_type='png')
+
+        #    print "done"
     
     return rawcam, vmem, pmap, pvmap
 

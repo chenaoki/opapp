@@ -168,8 +168,9 @@ class ParamWidget(QWidget):
             self.player2.setObject(vmem)
             self.player3.setObject(pmap)
             self.player4.setObject(pvmap)
-            
-            self.plot1.setObject(vmem)
+
+            if vmem is not None:
+                self.plot1.setObject(vmem)
 
             QMessageBox.information(None,"",u"処理完了！　保存フォルダ:\n"+saveDir)
 

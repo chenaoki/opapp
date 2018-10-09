@@ -45,8 +45,10 @@ class OpappPlayerLayout(QVBoxLayout):
         self.timer.setInterval(60)
         
         layout = QHBoxLayout()
+        layout.addWidget(QLabel(u'frame'))
         layout.addWidget(self.edit_frame)
         layout.addWidget(self.btn_back)
+        layout.addWidget(QLabel(u'step'))
         layout.addWidget(self.edit_step)
         layout.addWidget(self.btn_next)
         self.addLayout(layout)

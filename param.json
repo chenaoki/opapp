@@ -1,16 +1,16 @@
 {
     "camera": {
-        "path": "//jalife/Recordings/SimulationResults/ExperimentData/20170526-1/C001H001S0010",
+        "path": "C:/ExperimentData/20180801-1/C001H001S0003",
         "cam_type": "sa4",
-        "image_width": 512,
-        "image_height": 512,
+        "image_width": 256,
+        "image_height": 256,
         "frame_start": 0,
-        "frame_end": 400
+        "frame_end": 1000
     },
     "vmem": {
         "diff_min": 40,
         "intensity_min": 70,
-        "smooth_size": 1
+        "smooth_size": 5
     },
     "pvmap": {
         "pv_win": 3
@@ -19,8 +19,8 @@
         "save_int": 5,
         "cam": 1,
         "vmem": 1,
-        "pmap": 1,
-        "pvmap": 1,
+        "pmap": 0,
+        "pvmap": 0,
         "core": 1,
         "integrate": 3
     },
