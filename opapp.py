@@ -6,10 +6,12 @@ from opmap.rawCam import RawCam
 from opmap.vmemMap import VmemMap
 from opmap.phaseMap import PhaseMap
 from opmap.phaseVarianceMap import PhaseVarianceMap
+from opmap.apdMap import APDMap
 #from opmap.coreMap import CoreMap
-from opmap.util import makeMovie
+#from opmap.util import makeMovie
 #from opmap.util import phase_add
 #from opmap.cmap import bipolar
+from movie import makeMovie
 
 def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
     
@@ -85,6 +87,7 @@ def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
 
     if param_menu["pmap"] != 0 :
         print("PhaseMap...")
+        #pmap = APDMap(vmem) ## ! TO BE CORRECTED !
         pmap = PhaseMap(vmem)
         if param_menu["pmap"] in [2,3] : pmap.saveImage(saveDir+'/pmap', skip=save_int)
         if param_menu["pmap"] == 3 : makeMovie(saveDir+'/pmap')
@@ -95,8 +98,9 @@ def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
 
     if param_menu["pvmap"] != 0 :
         print("PhaseVarianceMap...")
-        pmap.smooth(9)
+        #pmap.smooth(9)
         pvmap = PhaseVarianceMap(pmap, size=pv_win)
+        #pvmap = PhaseMap(vmem) ## ! TO BE CORRECTED !
         if param_menu["pvmap"] in [2,3] : pvmap.saveImage(saveDir+'/pvmap', skip=save_int)
         if param_menu["pvmap"] == 3 : makeMovie(saveDir+'/pvmap')
         if param_menu["pvmap"] == 4 : np.save(saveDir+'/pvmap', pvmap.data)

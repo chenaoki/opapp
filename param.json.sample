@@ -1,22 +1,22 @@
 {
     "camera": {
-        "path": "C:/ExperimentData/20180801-1/C001H001S0003",
+        "path": "D:/ExperimentData/20190926-1/C001H001S0006",
         "cam_type": "sa4",
-        "image_width": 256,
-        "image_height": 256,
+        "image_width": 512,
+        "image_height": 512,
         "frame_start": 0,
         "frame_end": 1000
     },
     "vmem": {
-        "diff_min": 40,
-        "intensity_min": 70,
-        "smooth_size": 5
+        "diff_min": 20,
+        "intensity_min": 20,
+        "smooth_size": 9
     },
     "pvmap": {
         "pv_win": 3
     },
     "menu": {
-        "save_int": 5,
+        "save_int": 1,
         "cam": 1,
         "vmem": 1,
         "pmap": 0,

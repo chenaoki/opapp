@@ -85,6 +85,20 @@ class OpappPlotLayout(QVBoxLayout):
             #self.plot, = self.axes.plot([], [])
             self.draw()
          
+    def calc_APD70(self, ts):
+        apd_start = 0; apd_end = 0
+        threshold = 0.7*ts.min()+0.3*ts.max()
+        flg = 0
+        for i, v in enumerate(ts):
+            if i == 0 : continue
+            if v > threshold and flg == 0:
+                flg = 1
+                apd_start = i
+            if v <= threshold and flg == 1:
+                flg = 2
+                apd_end = i
+        return threshold, apd_start, apd_end
+    
     def draw(self):
         self.axes.clear()
         self.start = int(self.edit_start.text())
@@ -97,11 +111,19 @@ class OpappPlotLayout(QVBoxLayout):
         t = np.arange(self.start, self.end)
         if self.filter>1:
             ts = gaussian_filter1d(ts, sigma = self.filter, )
+        
         self.axes.set_xlim(self.start, self.end)
-        self.axes.set_ylim(self.vmin, self.vmax)
+        #self.axes.set_ylim(self.vmin, self.vmax)
+        self.axes.set_ylim(ts.min(), ts.max())
         #self.plot.set_data(t, ts)
         self.plot = self.axes.plot(t, ts)
+
+        threshold, apd_start, apd_end = self.calc_APD70(ts)
+        self.axes.hlines(threshold, self.start+apd_start, self.start+apd_end, "blue", linestyles="dashed")
+        self.axes.text(self.start+(0.7*apd_start+0.3*apd_end), threshold+(ts.max()-ts.min())*0.1, "APD70: %s (ms)" % (apd_end - apd_start), fontsize=20)
+        
         self.canvas.draw()
+        
         pass
         #except:
         #    print("error:", sys.exc_info()[0])
