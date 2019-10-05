@@ -140,6 +140,7 @@ class ParamWidget(QWidget):
     self.player4 = OpappObjectPlayerLayout()
     
     self.plot1 = OpappPlotLayout()
+    self.plot2 = OpappPlotLayout()
     
     #----------
     # Model
@@ -171,6 +172,7 @@ class ParamWidget(QWidget):
 
             if vmem is not None:
                 self.plot1.setObject(vmem)
+                self.plot2.setObject(cam)
 
             QMessageBox.information(None,"",u"処理完了！　保存フォルダ:\n"+saveDir)
 
@@ -328,16 +330,19 @@ class ParamWidget(QWidget):
     layout = QHBoxLayout()
     layout.addLayout(self.player1)
     layout.addLayout(self.player2)
-    cont_result.addLayout(layout)
-    
-    layout = QHBoxLayout()
-    layout.addLayout(self.plot1)
-    cont_result.addLayout(layout)
-    
-    layout = QHBoxLayout()
     layout.addLayout(self.player3)
-    layout.addLayout(self.player4)
-    cont_result.addLayout(layout)    
+    #layout.addLayout(self.player4)
+    cont_result.addLayout(layout)
+    
+    layout = QVBoxLayout()
+    layout.addLayout(self.plot1)
+    #layout.addLayout(self.plot2)
+    cont_result.addLayout(layout)
+    
+    #layout = QHBoxLayout()
+    #layout.addLayout(self.player3)
+    #layout.addLayout(self.player4)
+    #cont_result.addLayout(layout)    
 
     #----- build up
 
