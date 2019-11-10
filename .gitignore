@@ -1,3 +1,7 @@
 sample
 *.pyc
 param.json
+result/*
+*.mp4
+log.txt
+.ipynb_checkpoints/*
