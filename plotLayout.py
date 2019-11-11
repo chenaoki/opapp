@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QLineEdit, QLabel
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout
 
 import numpy as np
+import cupy as xp
 from scipy.ndimage.filters import gaussian_filter1d
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -107,7 +108,7 @@ class OpappPlotLayout(QVBoxLayout):
         self.pos_x = int(self.edit_pos_x.text())
         self.pos_y = int(self.edit_pos_y.text())
         #try:
-        ts = self.obj.data[self.start:self.end, self.pos_y, self.pos_x]
+        ts = xp.asnumpy(self.obj.data[self.start:self.end, self.pos_y, self.pos_x])
         t = np.arange(self.start, self.end)
         if self.filter>1:
             ts = gaussian_filter1d(ts, sigma = self.filter, )

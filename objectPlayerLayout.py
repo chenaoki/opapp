@@ -7,6 +7,8 @@ from PyQt5 import QtCore
 
 from playerLayout import OpappPlayerLayout
 
+import cupy as xp
+
 class OpappObjectPlayerLayout(OpappPlayerLayout):
     
     def __init__(self):
@@ -16,16 +18,18 @@ class OpappObjectPlayerLayout(OpappPlayerLayout):
     def setObject(self, obj):
         self.obj = obj
         if obj is None: return
-        if len(self.obj.data) > 0:
-            self.im = self.axes.imshow(obj.data[self.frame, :, :], vmin=obj.vmin, vmax=obj.vmax, cmap=obj.cmap)
-            self.changeFrame()
+        assert len(self.obj.data) > 0
+        self.im = self.axes.imshow(
+                xp.asnumpy(obj.data[self.frame, :, :]), 
+                vmin=obj.vmin, vmax=obj.vmax, cmap=obj.cmap)
+        self.changeFrame()
          
     def changeFrame(self):
         f_ = self.frame
         try:
             assert self.obj is not None
             self.frame = int(self.edit_frame.text())
-            self.im.set_data(self.obj.data[self.frame,:,:])
+            self.im.set_data( xp.asnumpy( self.obj.data[self.frame,:,:]))
             self.canvas.draw()
             pass
         except:

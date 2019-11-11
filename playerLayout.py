@@ -20,7 +20,7 @@ class OpappPlayerLayout(QVBoxLayout):
         
         self.ext = ext
         self.frame = 0
-        self.step = 1
+        self.step = 5
         
         self.edit_frame = QLineEdit()
         self.edit_frame.setText(str(self.frame))

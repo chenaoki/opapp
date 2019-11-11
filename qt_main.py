@@ -3,6 +3,7 @@
 
 import os, sys
 import json
+import cv2
 
 #from PyQt5.QtGui import *
 #from PyQt5.QtCore import *
@@ -15,6 +16,29 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGroupBox
 from opapp import run_opapp
 from objectPlayerLayout import OpappObjectPlayerLayout
 from plotLayout import OpappPlotLayout
+
+
+import matplotlib.pyplot as plt
+
+class ResultWidget(QWidget):
+  def __init__(self):
+    super(ResultWidget, self).__init__()
+    self.player1 = OpappObjectPlayerLayout()
+    self.player2 = OpappObjectPlayerLayout()
+    self.player3 = OpappObjectPlayerLayout()
+    self.player4 = OpappObjectPlayerLayout()
+    rows = QVBoxLayout()
+    row = QHBoxLayout()
+    row.addLayout(self.player1)
+    row.addLayout(self.player2)
+    rows.addLayout(row)
+    row = QHBoxLayout()
+    row.addLayout(self.player3)
+    row.addLayout(self.player4)
+    rows.addLayout(row)
+    self.setLayout(rows)
+    self.show()
+
 
 class ParamWidget(QWidget):
   cam_types = ["sa4", "max", "max10", "mini"]
@@ -154,33 +178,36 @@ class ParamWidget(QWidget):
             QFileDialog.ShowDirsOnly))
         saveDir = path + "/result/opapp/"
 
-        try:
-            assert path is not ""
-            self.path = path
-            self.saveParam()
-            cam, vmem, pmap, pvmap = run_opapp(raw_path=self.path, result_path=saveDir)
-            
-            #self.player1.setPath(os.path.join(self.path, 'result/opapp/cam'))
-            #self.player2.setPath(os.path.join(self.path, 'result/opapp/vmem'))
-            #self.player3.setPath(os.path.join(self.path, 'result/opapp/pmap'))
-            #self.player4.setPath(os.path.join(self.path, 'result/opapp/pvmap'))
-            
-            self.player1.setObject(cam)
-            self.player2.setObject(vmem)
-            self.player3.setObject(pmap)
-            self.player4.setObject(pvmap)
+        #try:
 
-            if vmem is not None:
-                self.plot1.setObject(vmem)
-                self.plot2.setObject(cam)
+        assert path is not ""
+        self.path = path
+        self.saveParam()
+        cam, vmem, pmap, pvmap, im_cpv = run_opapp(raw_path=self.path, result_path=saveDir)
+        
+        cv2.imshow( 'im_cpv', cv2.resize(im_cpv, (512,512)) )
+        
+        #self.player1.setPath(os.path.join(self.path, 'result/opapp/cam'))
+        #self.player2.setPath(os.path.join(self.path, 'result/opapp/vmem'))
+        #self.player3.setPath(os.path.join(self.path, 'result/opapp/pmap'))
+        #self.player4.setPath(os.path.join(self.path, 'result/opapp/pvmap'))
+        
+        self.player1.setObject(cam)
+        self.player2.setObject(vmem)
+        self.player3.setObject(pmap)
+        self.player4.setObject(pvmap)
 
-            QMessageBox.information(None,"",u"処理完了！　保存フォルダ:\n"+saveDir)
+        if vmem is not None:
+            self.plot1.setObject(vmem)
+            self.plot2.setObject(cam)
 
-        except:
-            err = QErrorMessage()
-            err.showMessage("Unexpected error:{0}".format(sys.exc_info()))
-            err.exec_()
-            return
+        QMessageBox.information(None,"",u"処理完了！　保存フォルダ:\n"+saveDir)
+
+        #except:
+        #    err = QErrorMessage()
+        #    err.showMessage("Unexpected error:{0}".format(sys.exc_info()))
+        #    err.exec_()
+        #    return
 
     btn = QPushButton(u'セッションフォルダを選んで実行', self)
     btn.clicked.connect(execute)
@@ -331,7 +358,7 @@ class ParamWidget(QWidget):
     layout.addLayout(self.player1)
     layout.addLayout(self.player2)
     layout.addLayout(self.player3)
-    #layout.addLayout(self.player4)
+    layout.addLayout(self.player4)
     cont_result.addLayout(layout)
     
     layout = QVBoxLayout()
@@ -390,4 +417,5 @@ class ParamWidget(QWidget):
 
 app = QApplication(sys.argv)
 a = ParamWidget()
+#r = ResultWidget()
 sys.exit(app.exec_())
