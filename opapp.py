@@ -101,7 +101,7 @@ def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
         im_cpv = cv2.cvtColor(im_cpv, cv2.COLOR_GRAY2BGR)
         im_cpv[:,:,0]=0
         im_cpv[:,:,1]=0
-        im_cpv = cv2.addWeighted(im, 0.8, im_cpv, 0.2, 255*0.2)
+        im_cpv = cv2.addWeighted(im, 1.0, im_cpv, 0.2, 0)
         print("done")
     else:
         print("Skip PhaseVarianceMap")
