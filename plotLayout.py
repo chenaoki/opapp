@@ -85,6 +85,12 @@ class OpappPlotLayout(QVBoxLayout):
             #self.plot.set_data(t, ts)
             #self.plot, = self.axes.plot([], [])
             self.draw()
+
+    def setPosition(self, x, y):
+        self.edit_pos_y.setText(str(y))
+        self.edit_pos_x.setText(str(x))
+        self.draw()
+
          
     def calc_APD70(self, ts):
         apd_start = 0; apd_end = 0

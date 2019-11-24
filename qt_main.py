@@ -190,8 +190,17 @@ class ParamWidget(QWidget):
         self.path = path
         self.saveParam()
         cam, vmem, pmap, pvmap, im_cpv = run_opapp(raw_path=self.path, result_path=saveDir)
+        im_disp = im_cpv.copy()
+
+        def mouse_event(event, x, y, flags, param):
+            im_disp = im_cpv
+            if event == cv2.EVENT_LBUTTONUP:
+                print((x,y))
+                cv2.circle(im_disp, (x,y), 50, (0,0,255),-1)
+                self.plot1.setPosition(x,y)
         
-        cv2.imshow( 'im_cpv', cv2.resize(im_cpv, (512,512)) )
+        cv2.namedWindow('camera image', cv2.WINDOW_NORMAL)
+        cv2.setMouseCallback('camera image', mouse_event)
         
         #self.player1.setPath(os.path.join(self.path, 'result/opapp/cam'))
         #self.player2.setPath(os.path.join(self.path, 'result/opapp/vmem'))
@@ -208,6 +217,13 @@ class ParamWidget(QWidget):
             self.plot2.setObject(cam)
 
         QMessageBox.information(None,"",u"処理完了！　保存フォルダ:\n"+saveDir)
+        
+        while(True):
+            #cv2.imshow( 'camera image', cv2.resize(im_disp, (512,512)) )
+            cv2.imshow( 'camera image', im_disp )
+            if cv2.waitKey(1) & 0xFF == ord("q"):
+                break
+
 
         #except:
         #    err = QErrorMessage()
