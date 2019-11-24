@@ -27,7 +27,8 @@ def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
     save_int      = param_menu.get("save_int",1)
     diff_min      = param_vmem.get("diff_min",0)
     intensity_min = param_vmem.get("intensity_min",0)
-    smooth_size   = param_vmem.get("smooth_size",9)
+    smooth_xy     = param_vmem.get("smooth_xy_size",1)
+    smooth_t      = param_vmem.get("smooth_t_size",1)
     pv_win        = param_pvmap.get("pv_win",9)
 
 
@@ -42,7 +43,7 @@ def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
     if param_menu["cam"] != 0 :
         print("RawCam...")
         rawcam = RawCam(**param_cam)
-        rawcam.shrink_xy(4)
+        print(rawcam.data.shape)
         roi_rect = {
             "top" : param_roi["top"],
             "bottom" : rawcam.data.shape[1] - 1 - param_roi["bottom"],
@@ -67,8 +68,8 @@ def run_opapp(json_path='./param.json', raw_path=None, result_path=None):
         if diff_min > 0 : vmem.setDiffRange(diff_min=diff_min)
         vmem.morphROI(closing=10)
         vmem.morphROI(erosion=10)
-        if smooth_size > 0 : vmem.smooth_t(size=smooth_size)
-        if smooth_size > 0 : vmem.smooth_xy(size=smooth_size)
+        if smooth_t > 1 : vmem.smooth_t(size=smooth_t)
+        if smooth_xy > 1 : vmem.smooth_xy(size=smooth_xy)
         #if param_menu["vmem"] in [2,3] : vmem.saveImage(saveDir+'/vmem', skip=save_int)
         #if param_menu["vmem"] == 3 : makeMovie(saveDir+'/vmem')
         #if param_menu["vmem"] == 4 : np.save(saveDir+'/vmem', vmem.data)
